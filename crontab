@@ -1,0 +1,2 @@
+
+*/30 * * * * python app/producer.py >> /logfile
