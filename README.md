@@ -27,20 +27,13 @@ $ docker-compose -f docker-compose.yml up -d
 ```
 
 
-## 👣 Additional steps
-### Create a test user for Airflow
-```
-$ docker-compose run airflow-webserver airflow users create --role Admin --username admin \
-  --email admin --firstname admin --lastname admin --password admin
-```
-
 
 ### Check accesses
 - Spark Master: http://localhost:8081
 - Apache superset - http://localhost:8088 (admin/admin)
 
 ### For importing dump in MySQL
-- Login to mysql docker container and import the ```dump-superset-latest``` SQL file from ```src/app/sqls``` folder 
+- Login to cassandra docker container and run the  SQL file from ```app/db``` folder 
 
 ### For running the commands manually
 - Login to ```spark-kafka-cassandra:latest``` container and run the following jobs
