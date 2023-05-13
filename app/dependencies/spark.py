@@ -18,9 +18,8 @@ class SparkConnection(object):
         self.files = params.get('files')
         self.jars = params.get('jars')
         self.packages = params.get('packages')
-        spark_config = {'hadoop.home.dir' : "C:\\hadoop"}
         # get spark app details with which to prefix all messages
-        self.start_spark(app_name=self.app_name, master="spark://spark:7077", files=self.files, packages =self.packages, jars=self.jars, spark_config=spark_config)
+        self.start_spark(app_name=self.app_name, files=self.files, packages =self.packages, jars=self.jars)
 
 
     def start_spark(self, app_name='my_spark_app', master='local[*]', packages= [], jars=[], files=[], spark_config={}):
@@ -45,13 +44,10 @@ class SparkConnection(object):
         for key, val in spark_config.items():
             spark_builder.config(key, val)
         
-        spark_builder.config("spark.executor.memory", "2G")
-
+        spark_builder.config("spark.executor.memory", "2g")
         # create session and retrieve Spark logger object
         spark_sess = spark_builder.getOrCreate()
-        spark_sess.sparkContext.setSystemProperty('spark.executor.memory', '2g')
-        spark_sess.sparkContext.setSystemProperty("hadoop.home.dir","C:\hadoop" )
-        spark_sess.sparkContext.setLogLevel("ERROR")
+        spark_sess.sparkContext.setLogLevel("DEBUG")
         spark_logger = logging.Log4j(spark_sess)
 
         # get configs file if sent to cluster with --files

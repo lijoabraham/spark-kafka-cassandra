@@ -27,23 +27,6 @@ services:
     networks:
       datapipeline:
         ipv4_address: 172.18.0.2
-  spark-worker:
-        image: bitnami/spark:3.2.1
-        environment:
-            - SPARK_MODE=worker
-            - SPARK_MASTER_URL=spark://spark:7077
-            - SPARK_WORKER_MEMORY=1G
-            - SPARK_WORKER_CORES=1
-            - SPARK_RPC_AUTHENTICATION_ENABLED=no
-            - SPARK_RPC_ENCRYPTION_ENABLED=no
-            - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-            - SPARK_SSL_ENABLED=no
-        volumes:
-          - ./data:/home
-          - ./app/:/usr/local/spark/app
-        networks:
-          datapipeline:
-            ipv4_address: 172.18.0.7
   zookeeper:
     image: 'wurstmeister/zookeeper'
     container_name: zookeeper
@@ -92,27 +75,24 @@ services:
     networks:
       datapipeline:
         ipv4_address: 172.18.0.5
-  worker:
-    image: 'python-docker:latest'
-    container_name: worker
-    hostname: worker
+  python-worker:
+    build: .
+    image: python-docker
+    environment:
+          - SPARK_MODE=worker
+          - SPARK_MASTER_URL=spark://spark:7077
+          - SPARK_WORKER_MEMORY=1G
+          - SPARK_WORKER_CORES=1
+          - SPARK_LOCAL_IP=127.0.0.1
+          - SPARK_MASTER_HOST= 0.0.0.0
+          - SPARK_RPC_AUTHENTICATION_ENABLED=no
+          - SPARK_RPC_ENCRYPTION_ENABLED=no
+          - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+          - SPARK_SSL_ENABLED=no
     volumes:
-      - ./app:/home/app
-    ports:
-      - '1122:1122'
+      - .:/home/app
+    stdin_open: true
+    tty: true
     networks:
       datapipeline:
         ipv4_address: 172.18.0.8
-  jupyter-pyspark:
-      # image: jupyter/pyspark-notebook:spark-3.2.1 # pyspark
-      image: jupyter/pyspark-notebook:python-3.8.8 # pyspark
-      #image: jupyter/all-spark-notebook:spark-3.2.1 # scala
-      #image: jupyter/datascience-notebook:latest # julia 
-      networks:
-        datapipeline:
-          ipv4_address: 172.18.0.6
-      ports:
-        - "8888:8888"
-      volumes:
-        - ./app/notebooks:/home/jovyan/work/notebooks/
-        - ./data:/home/jovyan/work/notebooks/data
