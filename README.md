@@ -1,8 +1,5 @@
 # spark-kafka-cassandra
 
-# mutual_fund_recommendation_etl
-
-
 ## 🛠 Setup
 
 Clone project
