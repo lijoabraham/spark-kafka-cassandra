@@ -1,12 +1,9 @@
 # spark-kafka-cassandra
 
-# mutual_fund_recommendation_etl
-
-
 ## 🛠 Setup
 
 Clone project
-```git clone https://github.com/lijoabraham/mutual_fund_recommendation_etl.git```
+```git clone https://github.com/lijoabraham/spark-kafka-cassandra.git```
 
 ### Build spark-python Docker
 ```
